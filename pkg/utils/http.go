@@ -4,6 +4,7 @@ import (
 	"bitcoin-challenge/pkg/logger"
 	"bitcoin-challenge/pkg/utils/constants"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -11,6 +12,18 @@ import (
 
 type Options interface {
 	GetHeadersRequest() http.Header
+}
+
+type CustomHeaders struct {
+	headers http.Header
+}
+
+func (c CustomHeaders) GetHeadersRequest() http.Header {
+	return c.headers
+}
+
+func NewCustomHeaders(headers http.Header) *CustomHeaders {
+	return &CustomHeaders{headers: headers}
 }
 
 var client http.Client
@@ -29,6 +42,7 @@ func Get(ctx context.Context, url string, responseBody interface{}, options ...O
 			}
 		}
 	}
+	req.SetBasicAuth(constants.Username, constants.Password)
 
 	res, err := client.Do(req)
 	defer res.Body.Close()
@@ -45,7 +59,7 @@ func Get(ctx context.Context, url string, responseBody interface{}, options ...O
 		return err
 	}
 
-	err = json.Unmarshal(bodyRes, responseBody)
+	err = json.Unmarshal(bodyRes, &responseBody)
 	if err != nil {
 		logger.Error(constants.ErrorToReadResponseBody, err)
 		return err
@@ -56,4 +70,9 @@ func Get(ctx context.Context, url string, responseBody interface{}, options ...O
 
 func Post() {
 
+}
+
+func BasicAuth(username, password string) string {
+	auth := username + ":" + password
+	return base64.StdEncoding.EncodeToString([]byte(auth))
 }

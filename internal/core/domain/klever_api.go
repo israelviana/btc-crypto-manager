@@ -13,9 +13,7 @@ type AddressDetails struct {
 	UnconfirmedBalance string   `json:"unconfirmedBalance"`
 	UnconfirmedTxs     int      `json:"unconfirmedTxs"`
 	Txs                int      `json:"txs"`
-	TxIds              []string `json:"txIds"`
-	Vin                []Vin    `json:"vin"`
-	VOut               []VOut   `json:"vout"`
+	Txids              []string `json:"txids"`
 }
 
 type TransationDetails struct {
@@ -31,6 +29,8 @@ type TransationDetails struct {
 	ValueIn       string `json:"valueIn"`
 	Fees          string `json:"fees"`
 	Hex           string `json:"hex"`
+	Vin           []Vin  `json:"vin"`
+	VOut          []VOut `json:"vout"`
 }
 
 type Vin struct {
@@ -50,4 +50,12 @@ type VOut struct {
 	Hex       string   `json:"hex"`
 	Addresses []string `json:"addresses"`
 	IsAddress bool     `json:"isAddress"`
+}
+
+type UTXODetails struct {
+	Txid          string `json:"txid"`
+	Vout          int    `json:"vout"`
+	Value         string `json:"value"`
+	Height        int    `json:"height"`
+	Confirmations int    `json:"confirmations"`
 }

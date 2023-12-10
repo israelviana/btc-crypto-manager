@@ -1,10 +1,16 @@
 package domain
 
 type DetailsAddress struct {
-	Address string `json:"address"`
-	Balance string `json:"balance"`
-	TotalTx int    `json:"totalTx"`
-	Total   Total  `json:"total"`
+	Address       string        `json:"address"`
+	Balance       string        `json:"balance"`
+	TotalTx       int           `json:"totalTx"`
+	Total         Total         `json:"total"`
+	BalanceDetail BalanceDetail `json:"balance_details"`
+}
+
+type BalanceDetail struct {
+	Confirmed   string `json:"confirmed"`
+	Unconfirmed string `json:"unconfirmed"`
 }
 
 type Total struct {

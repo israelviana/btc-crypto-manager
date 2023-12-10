@@ -6,6 +6,7 @@ import (
 	"bitcoin-challenge/pkg/utils"
 	"bitcoin-challenge/pkg/utils/constants"
 	"context"
+	"net/http"
 	"strings"
 	"time"
 )
@@ -22,10 +23,13 @@ func (srv *Service) RequestAddressDetailsPerAddress(address string) (*domain.Add
 
 	urlAddressDetailsPerAddress.WriteString(constants.URLKlever + constants.SufixUrlAddressDetails + address)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
-	err := utils.Get(ctx, urlAddressDetailsPerAddress.String(), addressDetails)
+	headers := http.Header{}
+	headers.Add("Authorization", "Basic "+utils.BasicAuth(constants.Username, constants.Password))
+
+	err := utils.Get(ctx, urlAddressDetailsPerAddress.String(), &addressDetails, utils.NewCustomHeaders(headers))
 
 	if err != nil {
 		logger.Error(constants.ErrorToMakeRequest, err)
@@ -35,23 +39,25 @@ func (srv *Service) RequestAddressDetailsPerAddress(address string) (*domain.Add
 	return &addressDetails, nil
 }
 
-func (srv *Service) RequestAddressUTXODetails(address string) (*domain.AddressDetails, error) {
-	var addressUtxoDetails domain.AddressDetails
+func (srv *Service) RequestAddressUTXODetails(address string) (*[]domain.UTXODetails, error) {
+	var utxoDetails []domain.UTXODetails
 	var urlUtxoDetailsPerAddress strings.Builder
 
 	urlUtxoDetailsPerAddress.WriteString(constants.URLKlever + constants.SufixUrlUTXODetails + address)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
-	err := utils.Get(ctx, urlUtxoDetailsPerAddress.String(), addressUtxoDetails)
+	headers := http.Header{}
+	headers.Add("Authorization", "Basic "+utils.BasicAuth(constants.Username, constants.Password))
+	err := utils.Get(ctx, urlUtxoDetailsPerAddress.String(), &utxoDetails, utils.NewCustomHeaders(headers))
 
 	if err != nil {
 		logger.Error(constants.ErrorToMakeRequest, err)
 		return nil, err
 	}
 
-	return &addressUtxoDetails, nil
+	return &utxoDetails, nil
 }
 
 func (srv *Service) RequestTransactionDetails(transactionId string) (*domain.TransationDetails, error) {
@@ -60,10 +66,12 @@ func (srv *Service) RequestTransactionDetails(transactionId string) (*domain.Tra
 
 	urlTransactionDetails.WriteString(constants.URLKlever + constants.SufixUrlTransactionDetails + transactionId)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
-	err := utils.Get(ctx, urlTransactionDetails.String(), transactionDetails)
+	headers := http.Header{}
+	headers.Add("Authorization", "Basic "+utils.BasicAuth(constants.Username, constants.Password))
+	err := utils.Get(ctx, urlTransactionDetails.String(), &transactionDetails, utils.NewCustomHeaders(headers))
 
 	if err != nil {
 		logger.Error(constants.ErrorToMakeRequest, err)
