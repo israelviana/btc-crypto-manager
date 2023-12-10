@@ -25,7 +25,7 @@ func (srv *Service) RequestAddressDetailsPerAddress(address string) (*domain.Add
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := utils.Get(ctx, urlAddressDetailsPerAddress.String(), utils.MethodGet, addressDetails)
+	err := utils.Get(ctx, urlAddressDetailsPerAddress.String(), addressDetails)
 
 	if err != nil {
 		logger.Error(constants.ErrorToMakeRequest, err)
@@ -44,7 +44,7 @@ func (srv *Service) RequestAddressUTXODetails(address string) (*domain.AddressDe
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := utils.Get(ctx, urlUtxoDetailsPerAddress.String(), utils.MethodGet, addressUtxoDetails)
+	err := utils.Get(ctx, urlUtxoDetailsPerAddress.String(), addressUtxoDetails)
 
 	if err != nil {
 		logger.Error(constants.ErrorToMakeRequest, err)
@@ -63,7 +63,7 @@ func (srv *Service) RequestTransactionDetails(transactionId string) (*domain.Tra
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := utils.Get(ctx, urlTransactionDetails.String(), utils.MethodGet, transactionDetails)
+	err := utils.Get(ctx, urlTransactionDetails.String(), transactionDetails)
 
 	if err != nil {
 		logger.Error(constants.ErrorToMakeRequest, err)

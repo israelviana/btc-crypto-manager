@@ -9,28 +9,14 @@ import (
 	"net/http"
 )
 
-type HttpMethod string
-
-const (
-	MethodGet     HttpMethod = "GET"
-	MethodHead    HttpMethod = "HEAD"
-	MethodPost    HttpMethod = "POST"
-	MethodPut     HttpMethod = "PUT"
-	MethodPatch   HttpMethod = "PATCH" // RFC 5789
-	MethodDelete  HttpMethod = "DELETE"
-	MethodConnect HttpMethod = "CONNECT"
-	MethodOptions HttpMethod = "OPTIONS"
-	MethodTrace   HttpMethod = "TRACE"
-)
-
 type Options interface {
 	GetHeadersRequest() http.Header
 }
 
 var client http.Client
 
-func Get(ctx context.Context, url string, method HttpMethod, responseBody interface{}, options ...Options) error {
-	req, err := http.NewRequestWithContext(ctx, string(method), url, nil)
+func Get(ctx context.Context, url string, responseBody interface{}, options ...Options) error {
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		logger.Error(constants.ErrorToCreateRequest, err)
 		return err
