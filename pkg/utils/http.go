@@ -3,6 +3,7 @@ package utils
 import (
 	"bitcoin-challenge/pkg/logger"
 	"bitcoin-challenge/pkg/utils/constants"
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -68,10 +69,49 @@ func Get(ctx context.Context, url string, responseBody interface{}, options ...O
 	return nil
 }
 
-func Post() {
+func Post(ctx context.Context, url string, requestBody interface{}, responseBody interface{}, options ...Options) error {
+	jsonData, err := json.Marshal(requestBody)
+	if err != nil {
+		logger.Error(constants.ErrorToCreateRequest, err)
+		return err
+	}
 
+	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		logger.Error(constants.ErrorToCreateRequest, err)
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	for _, option := range options {
+		for key, values := range option.GetHeadersRequest() {
+			for _, value := range values {
+				req.Header.Add(key, value)
+			}
+		}
+	}
+
+	res, err := client.Do(req)
+	if err != nil {
+		logger.Error(constants.ErrorToMakeRequest, err)
+		return err
+	}
+	defer res.Body.Close()
+
+	bodyRes, err := io.ReadAll(res.Body)
+	if err != nil {
+		logger.Error(constants.ErrorToReadResponseBody, err)
+		return err
+	}
+
+	err = json.Unmarshal(bodyRes, responseBody)
+	if err != nil {
+		logger.Error(constants.ErrorToReadResponseBody, err)
+		return err
+	}
+
+	return nil
 }
-
 func BasicAuth(username, password string) string {
 	auth := username + ":" + password
 	return base64.StdEncoding.EncodeToString([]byte(auth))

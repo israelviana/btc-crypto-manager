@@ -9,5 +9,5 @@ func MapBitcoinRoutes(bitcoinGroup fiber.Router, bitcoinHandlers ports.BitcoinHa
 	bitcoinGroup.Get("details/:address", bitcoinHandlers.FindDetailsPerAddress)
 	bitcoinGroup.Get("balance/:address", bitcoinHandlers.FindBalancePerAddress)
 	bitcoinGroup.Get("send", bitcoinHandlers.MountUTXO)
-	bitcoinGroup.Get("tx:tx", bitcoinHandlers.FindDetailsPerTransactionId)
+	bitcoinGroup.Get("tx/:tx", bitcoinHandlers.FindDetailsPerTransactionId)
 }

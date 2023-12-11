@@ -50,6 +50,16 @@ func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
 }
 
 func (srv *Handler) FindDetailsPerTransactionId(ctx *fiber.Ctx) error {
+	transactionID := ctx.Params("tx")
 
-	return nil
+	if transactionID == "" {
+		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "transactionID dont be could empty"})
+	}
+
+	detailsPerTransaction, err := srv.bitcoinService.FindDetailsPerTransactionId(transactionID)
+	if err != nil {
+		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "error to find details per transactionID"})
+	}
+
+	return ctx.Status(http.StatusOK).JSON(&detailsPerTransaction)
 }
