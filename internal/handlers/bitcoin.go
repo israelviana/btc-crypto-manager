@@ -73,7 +73,7 @@ func (srv *Handler) FindBalancePerAddress(ctx *fiber.Ctx) error {
 // @Accept  json
 // @Produce  json
 // @Param   request body domain.BitcoinRequest true "Bitcoin Request"
-// @Success 200 {object} []domain.UTXODetails "UTXO"
+// @Success 200 {object} []domain.UTXOs "UTXO"
 // @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
 // @Router /send [post]
 func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
