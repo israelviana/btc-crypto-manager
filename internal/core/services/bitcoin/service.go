@@ -62,10 +62,32 @@ func (srv *Service) FindBalancePerAddress(address string) (*domain.BalanceDetail
 	return &balanceDetails, nil
 }
 
-func (srv *Service) MountUTXO() (*domain.Send, error) {
-	var send domain.Send
+func (srv *Service) MountUTXO(address string, amountNeeded string) (*[]domain.UTXODetails, error) {
+	var selectedUTXOs []domain.UTXODetails
+	var totalAmount int
 
-	return &send, nil
+	utxoDetails, err := srv.kleverService.RequestAddressUTXODetails(address)
+	if err != nil {
+		return nil, errors.New("error to get UTXO details in klever api")
+	}
+
+	amountValueNeeded, _ := strconv.Atoi(amountNeeded)
+	for _, utxo := range *utxoDetails {
+		utxoValue, _ := strconv.Atoi(utxo.Value)
+
+		totalAmount += utxoValue
+		selectedUTXOs = append(selectedUTXOs, utxo)
+
+		if totalAmount >= amountValueNeeded {
+			break
+		}
+	}
+
+	if totalAmount < amountValueNeeded {
+		return nil, errors.New("selected UTXOs do not cover the required amount")
+	}
+
+	return &selectedUTXOs, nil
 }
 
 func (srv *Service) FindDetailsPerTransactionId(transactionId string) (*domain.Transaction, error) {

@@ -8,6 +8,6 @@ import (
 func MapBitcoinRoutes(bitcoinGroup fiber.Router, bitcoinHandlers ports.BitcoinHandler) {
 	bitcoinGroup.Get("details/:address", bitcoinHandlers.FindDetailsPerAddress)
 	bitcoinGroup.Get("balance/:address", bitcoinHandlers.FindBalancePerAddress)
-	bitcoinGroup.Get("send", bitcoinHandlers.MountUTXO)
+	bitcoinGroup.Post("send", bitcoinHandlers.MountUTXO)
 	bitcoinGroup.Get("tx/:tx", bitcoinHandlers.FindDetailsPerTransactionId)
 }

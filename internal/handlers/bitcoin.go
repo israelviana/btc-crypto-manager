@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bitcoin-challenge/internal/core/domain"
 	"bitcoin-challenge/internal/core/ports"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
@@ -45,8 +46,19 @@ func (srv *Handler) FindBalancePerAddress(ctx *fiber.Ctx) error {
 }
 
 func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
+	var request domain.BitcoinRequest
 
-	return nil
+	if err := ctx.BodyParser(&request); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "error to read received body"})
+	}
+
+	utxo, err := srv.bitcoinService.MountUTXO(request.Address, request.Amount)
+
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "error to read received body"})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(&utxo)
 }
 
 func (srv *Handler) FindDetailsPerTransactionId(ctx *fiber.Ctx) error {

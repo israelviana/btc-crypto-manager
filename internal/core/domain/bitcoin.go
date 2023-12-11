@@ -38,3 +38,8 @@ type Address struct {
 	Address string `json:"address"`
 	Value   string `json:"value"`
 }
+
+type BitcoinRequest struct {
+	Address string `json:"address"`
+	Amount  string `json:"amount"`
+}
