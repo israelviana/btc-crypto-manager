@@ -6,6 +6,7 @@ import (
 	"bitcoin-challenge/internal/handlers"
 	"bitcoin-challenge/internal/routers"
 	"bitcoin-challenge/pkg/logger"
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
@@ -37,6 +38,7 @@ func InitServer(app *fiber.App) {
 
 	routers.MapBitcoinRoutes(bitcoinGroup, bitcoinHandler)
 
+	app.Get("/swagger/*", swagger.HandlerDefault)
 	health.Get("", func(c *fiber.Ctx) error {
 		return c.Status(http.StatusOK).JSON(map[string]string{"status": "OK"})
 	})

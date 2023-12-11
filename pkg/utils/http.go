@@ -1,12 +1,14 @@
 package utils
 
 import (
+	"bitcoin-challenge/internal/core/domain"
 	"bitcoin-challenge/pkg/logger"
 	"bitcoin-challenge/pkg/utils/constants"
 	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"github.com/gofiber/fiber/v2"
 	"io"
 	"net/http"
 )
@@ -115,4 +117,19 @@ func Post(ctx context.Context, url string, requestBody interface{}, responseBody
 func BasicAuth(username, password string) string {
 	auth := username + ":" + password
 	return base64.StdEncoding.EncodeToString([]byte(auth))
+}
+
+func HTTPFail(ctx *fiber.Ctx, code int, err error, message string) error {
+	errJson, _ := json.Marshal(err)
+
+	result := &domain.HTTPErrorResponse{
+		Error:   errJson,
+		Message: message,
+	}
+
+	if err != nil {
+		result.ErrorMessage = err.Error()
+	}
+
+	return ctx.Status(code).JSON(result)
 }

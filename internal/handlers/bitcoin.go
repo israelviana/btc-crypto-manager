@@ -3,6 +3,7 @@ package handlers
 import (
 	"bitcoin-challenge/internal/core/domain"
 	"bitcoin-challenge/internal/core/ports"
+	"bitcoin-challenge/pkg/utils"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 )
@@ -15,36 +16,66 @@ func NewBitcoinHandler(bitcoinService ports.BitcoinService) *Handler {
 	return &Handler{bitcoinService: bitcoinService}
 }
 
+// FindDetailsPerAddress gets the details for a specific Bitcoin address
+// @Summary Find details per Bitcoin address
+// @Description Retrieves detailed information for a given Bitcoin address
+// @Tags Bitcoin
+// @Accept  json
+// @Produce  json
+// @Param   address path string true "Bitcoin Address"
+// @Success 200 {object} domain.DetailsAddress "Bitcoin Details"
+// @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
+// @Router /bitcoin/address/{address} [get]
 func (srv *Handler) FindDetailsPerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
 	if address == "" {
-		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "address bitcoin dont be could empty"})
+		return utils.HTTPFail(ctx, http.StatusBadRequest, nil, "address bitcoin dont be could empty")
 	}
 
 	perAddress, err := srv.bitcoinService.FindDetailsPerAddress(address)
 	if err != nil {
-		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "error to find bitcoin details per address"})
+		return utils.HTTPFail(ctx, http.StatusBadRequest, err, "error to find bitcoin details per address")
 	}
 
 	return ctx.Status(http.StatusOK).JSON(&perAddress)
 }
 
+// FindBalancePerAddress gets the balance for a specific Bitcoin address
+// @Summary Find balance per Bitcoin address
+// @Description Retrieves balance information for a given Bitcoin address
+// @Tags Bitcoin
+// @Accept  json
+// @Produce  json
+// @Param   address path string true "Bitcoin Address"
+// @Success 200 {object} domain.BalanceDetail "Bitcoin Balance"
+// @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
+// @Router /bitcoin/balance/{address} [get]
 func (srv *Handler) FindBalancePerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
 	if address == "" {
-		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "address bitcoin dont be could empty"})
+		return utils.HTTPFail(ctx, http.StatusBadRequest, nil, "address bitcoin dont be could empty")
 	}
 
 	perAddress, err := srv.bitcoinService.FindBalancePerAddress(address)
 	if err != nil {
-		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "error to find balance details per address"})
+		return utils.HTTPFail(ctx, http.StatusBadRequest, err, "error to find balance details per address")
 	}
 
 	return ctx.Status(http.StatusOK).JSON(&perAddress)
 }
 
+// MountUTXO mounts a UTXO set for a Bitcoin transaction
+// @Summary Mount UTXO
+// @Description Creates a UTXO set for a given Bitcoin address and amount
+// @Tags Bitcoin
+// @Accept  json
+// @Produce  json
+// @Param   request body domain.BitcoinRequest true "Bitcoin Request"
+// @Success 200 {object} domain.UTXODetails "UTXO"
+// @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
+// @Router /bitcoin/utxo [post]
 func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
 	var request domain.BitcoinRequest
 
@@ -61,6 +92,16 @@ func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(&utxo)
 }
 
+// FindDetailsPerTransactionId gets details for a specific Bitcoin transaction ID
+// @Summary Find details per transaction ID
+// @Description Retrieves detailed information for a given Bitcoin transaction ID
+// @Tags Bitcoin
+// @Accept  json
+// @Produce  json
+// @Param   tx path string true "Transaction ID"
+// @Success 200 {object} domain.Transaction "Transaction Details"
+// @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
+// @Router /bitcoin/transaction/{tx} [get]
 func (srv *Handler) FindDetailsPerTransactionId(ctx *fiber.Ctx) error {
 	transactionID := ctx.Params("tx")
 

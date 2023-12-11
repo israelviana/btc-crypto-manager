@@ -2,6 +2,7 @@ package main
 
 import (
 	"bitcoin-challenge/internal/server"
+
 	"github.com/gofiber/fiber/v2"
 )
 
