@@ -25,7 +25,7 @@ func NewBitcoinHandler(bitcoinService ports.BitcoinService) *Handler {
 // @Param   address path string true "Bitcoin Address"
 // @Success 200 {object} domain.DetailsAddress "Bitcoin Details"
 // @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
-// @Router /bitcoin/address/{address} [get]
+// @Router /address/{address} [get]
 func (srv *Handler) FindDetailsPerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
@@ -50,7 +50,7 @@ func (srv *Handler) FindDetailsPerAddress(ctx *fiber.Ctx) error {
 // @Param   address path string true "Bitcoin Address"
 // @Success 200 {object} domain.BalanceDetail "Bitcoin Balance"
 // @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
-// @Router /bitcoin/balance/{address} [get]
+// @Router /balance/{address} [get]
 func (srv *Handler) FindBalancePerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
@@ -73,9 +73,9 @@ func (srv *Handler) FindBalancePerAddress(ctx *fiber.Ctx) error {
 // @Accept  json
 // @Produce  json
 // @Param   request body domain.BitcoinRequest true "Bitcoin Request"
-// @Success 200 {object} domain.UTXODetails "UTXO"
+// @Success 200 {object} []domain.UTXODetails "UTXO"
 // @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
-// @Router /bitcoin/utxo [post]
+// @Router /send [post]
 func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
 	var request domain.BitcoinRequest
 
@@ -101,7 +101,7 @@ func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
 // @Param   tx path string true "Transaction ID"
 // @Success 200 {object} domain.Transaction "Transaction Details"
 // @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
-// @Router /bitcoin/transaction/{tx} [get]
+// @Router /tx/{tx} [get]
 func (srv *Handler) FindDetailsPerTransactionId(ctx *fiber.Ctx) error {
 	transactionID := ctx.Params("tx")
 

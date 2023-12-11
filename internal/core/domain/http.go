@@ -1,16 +1,16 @@
 package domain
 
-import "encoding/json"
+type RawJSONMessage []byte
 
 type HTTPResponse struct {
 	Data    any    `json:"data"`
-	PerPage uint64 `json:"per_page,omitempty"`
-	Page    uint64 `json:"page,omitempty"`
-	Total   uint64 `json:"total,omitempty"`
+	PerPage uint64 `json:"per_page"`
+	Page    uint64 `json:"page"`
+	Total   uint64 `json:"total"`
 }
 
 type HTTPErrorResponse struct {
-	Error        json.RawMessage `json:"error,omitempty"`
-	ErrorMessage string          `json:"errorMessage,omitempty"`
-	Message      string          `json:"message"`
+	Error        RawJSONMessage `json:"error"`
+	ErrorMessage string         `json:"errorMessage"`
+	Message      string         `json:"message"`
 }

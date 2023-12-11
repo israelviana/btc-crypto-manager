@@ -62,8 +62,10 @@ func (srv *Service) FindBalancePerAddress(address string) (*domain.BalanceDetail
 	return &balanceDetails, nil
 }
 
-func (srv *Service) MountUTXO(address string, amountNeeded string) (*[]domain.UTXODetails, error) {
-	var selectedUTXOs []domain.UTXODetails
+func (srv *Service) MountUTXO(address string, amountNeeded string) (*domain.UTXOs, error) {
+	var selectedUTXOs []domain.BitcoinReturnSend
+	var utxosItem domain.UTXOs
+
 	var totalAmount int
 
 	utxoDetails, err := srv.kleverService.RequestAddressUTXODetails(address)
@@ -76,18 +78,23 @@ func (srv *Service) MountUTXO(address string, amountNeeded string) (*[]domain.UT
 		utxoValue, _ := strconv.Atoi(utxo.Value)
 
 		totalAmount += utxoValue
-		selectedUTXOs = append(selectedUTXOs, utxo)
+		selectedUTXOs = append(selectedUTXOs, domain.BitcoinReturnSend{
+			TxId:   utxo.TxID,
+			Amount: utxo.Value,
+		})
 
 		if totalAmount >= amountValueNeeded {
 			break
 		}
 	}
 
+	utxosItem.UTXOs = selectedUTXOs
+
 	if totalAmount < amountValueNeeded {
 		return nil, errors.New("selected UTXOs do not cover the required amount")
 	}
 
-	return &selectedUTXOs, nil
+	return &utxosItem, nil
 }
 
 func (srv *Service) FindDetailsPerTransactionId(transactionId string) (*domain.Transaction, error) {

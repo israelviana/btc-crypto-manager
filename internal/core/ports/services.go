@@ -7,7 +7,7 @@ import (
 type BitcoinService interface {
 	FindDetailsPerAddress(address string) (*domain.DetailsAddress, error)
 	FindBalancePerAddress(address string) (*domain.BalanceDetail, error)
-	MountUTXO(address string, amountNeeded string) (*[]domain.UTXODetails, error)
+	MountUTXO(address string, amountNeeded string) (*domain.UTXOs, error)
 	FindDetailsPerTransactionId(transactionId string) (*domain.Transaction, error)
 }
 

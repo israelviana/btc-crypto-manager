@@ -23,11 +23,6 @@ type Send struct {
 	Unconfirmed string `json:"unconfirmed"`
 }
 
-type Utxos struct {
-	TxId   string `json:"tx_id"`
-	Amount string `json:"amount"`
-}
-
 type Transaction struct {
 	Addresses []Address `json:"addresses"`
 	Block     int       `json:"block"`
@@ -42,4 +37,13 @@ type Address struct {
 type BitcoinRequest struct {
 	Address string `json:"address"`
 	Amount  string `json:"amount"`
+}
+
+type BitcoinReturnSend struct {
+	TxId   string `json:"txid"`
+	Amount string `json:"amount"`
+}
+
+type UTXOs struct {
+	UTXOs []BitcoinReturnSend `json:"utxos"`
 }

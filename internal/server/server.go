@@ -1,6 +1,7 @@
 package server
 
 import (
+	_ "bitcoin-challenge/docs"
 	"bitcoin-challenge/internal/core/services/bitcoin"
 	"bitcoin-challenge/internal/core/services/klever"
 	"bitcoin-challenge/internal/handlers"
