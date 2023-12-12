@@ -39,18 +39,11 @@ The API offers the following endpoints:
 - **Parameters**:
     - `tx`: Bitcoin Transaction ID (path parameter).
 
-## How to use
+## How to run
 
-To use the API, make requests to the above endpoints with the appropriate parameters. Below are examples of how to make requests for each endpoint.
+- **Dependecies**: Install the dependencies using go mod download.
+- **Run**: Run the service using go run main.go.
 
-## Installation and Configuration
 
-Instructions on how to configure and launch the project locally.
-
-## License
-
-Include details about the project license.
-
-## Contributions
-
-Instructions on how to contribute to the project.
+## Swagger
+After run, access:http://localhost:8080/swagger/index.html#/ to see swagger documentation
