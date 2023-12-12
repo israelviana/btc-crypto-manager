@@ -29,7 +29,7 @@ func NewBitcoinHandler(bitcoinService ports.BitcoinService) *Handler {
 func (srv *Handler) FindDetailsPerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
-	if address == "" {
+	if !utils.ValidateBitcoinAddress(address) {
 		return utils.HTTPFail(ctx, http.StatusBadRequest, nil, "address bitcoin dont be could empty")
 	}
 
@@ -54,7 +54,7 @@ func (srv *Handler) FindDetailsPerAddress(ctx *fiber.Ctx) error {
 func (srv *Handler) FindBalancePerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
-	if address == "" {
+	if !utils.ValidateBitcoinAddress(address) {
 		return utils.HTTPFail(ctx, http.StatusBadRequest, nil, "address bitcoin dont be could empty")
 	}
 
@@ -105,7 +105,7 @@ func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
 func (srv *Handler) FindDetailsPerTransactionId(ctx *fiber.Ctx) error {
 	transactionID := ctx.Params("tx")
 
-	if transactionID == "" {
+	if !utils.ValidateTransactionID(transactionID) {
 		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "transactionID dont be could empty"})
 	}
 
