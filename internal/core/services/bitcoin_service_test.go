@@ -6,10 +6,10 @@ import (
 	"testing"
 )
 
-var kleverService = klever.NewKleverService()
-var bitcoinService = bitcoin.NewBitcoinService(kleverService)
-
 func TestFindDetailsPerAddress(t *testing.T) {
+	kleverService := klever.NewKleverService()
+	bitcoinService := bitcoin.NewBitcoinService(kleverService)
+
 	type TestBitcoinAddress struct {
 		BitcoinAddress string
 		Expected       bool
@@ -34,6 +34,9 @@ func TestFindDetailsPerAddress(t *testing.T) {
 }
 
 func TestFindBalancePerAddress(t *testing.T) {
+	kleverService := klever.NewKleverService()
+	bitcoinService := bitcoin.NewBitcoinService(kleverService)
+
 	type TestBitcoinAddress struct {
 		BitcoinAddress string
 		Expected       bool
@@ -58,6 +61,9 @@ func TestFindBalancePerAddress(t *testing.T) {
 }
 
 func TestMountUTXO(t *testing.T) {
+	kleverService := klever.NewKleverService()
+	bitcoinService := bitcoin.NewBitcoinService(kleverService)
+
 	type TestUTXOS struct {
 		BitcoinAddress string
 		AmountNeeded   string
@@ -84,25 +90,28 @@ func TestMountUTXO(t *testing.T) {
 }
 
 func TestFindDetailsPerTransactionId(t *testing.T) {
+	kleverService := klever.NewKleverService()
+	bitcoinService := bitcoin.NewBitcoinService(kleverService)
+
 	type TestDetailsPerTransactionId struct {
 		TransactionID string
 		Expected      bool
 	}
 
-	casesTestsUTXOS := TestDetailsPerTransactionId{
+	caseTestUTXOS := TestDetailsPerTransactionId{
 		TransactionID: "6b5ae35d752ceff9618d6850a453719464d63ffdfa17332a0bd61db361909394",
 		Expected:      true,
 	}
 
-	details, err := bitcoinService.FindDetailsPerTransactionId(casesTestsUTXOS.TransactionID)
+	details, err := bitcoinService.FindDetailsPerTransactionId(caseTestUTXOS.TransactionID)
 	if err != nil {
 		t.Errorf("Error to find balance per address test: %s", err.Error())
 	}
 
 	result := details.TxID != ""
 
-	if result != casesTestsUTXOS.Expected {
-		t.Errorf("Output %t not equal to expected %t", result, casesTestsUTXOS.Expected)
+	if result != caseTestUTXOS.Expected {
+		t.Errorf("Output %t not equal to expected %t", result, caseTestUTXOS.Expected)
 	}
 
 }

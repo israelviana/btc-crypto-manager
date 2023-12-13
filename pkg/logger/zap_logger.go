@@ -10,7 +10,7 @@ import (
 var logger *zap.Logger
 
 func InitZapLogger() {
-	logConfiguration := zap.Config{
+	config := zap.Config{
 		OutputPaths: []string{getOutputLogs()},
 		Level:       zap.NewAtomicLevelAt(getLevelLogs()),
 		Encoding:    "json",
@@ -24,28 +24,29 @@ func InitZapLogger() {
 		},
 	}
 
-	logger, _ = logConfiguration.Build()
+	var err error
+	logger, err = config.Build()
+	if err != nil {
+		panic("failed to initialize zap logger: " + err.Error())
+	}
 }
 
 func Info(message string, tags ...zap.Field) {
 	logger.Info(message, tags...)
-	logger.Sync()
 }
 
 func Error(message string, err error, tags ...zap.Field) {
 	tags = append(tags, zap.NamedError("error", err))
 	logger.Error(message, tags...)
-	logger.Sync()
 }
 
 func Fatal(message string, err error, tags ...zap.Field) {
 	tags = append(tags, zap.NamedError("error", err))
 	logger.Fatal(message, tags...)
-	logger.Sync()
 }
 
 func getOutputLogs() string {
-	output := strings.ToLower(strings.TrimSpace(os.Getenv("log_output")))
+	output := strings.ToLower(strings.TrimSpace(os.Getenv("LOG_OUTPUT")))
 
 	if output == "" {
 		return "stdout"
@@ -55,7 +56,8 @@ func getOutputLogs() string {
 }
 
 func getLevelLogs() zapcore.Level {
-	switch strings.ToLower(strings.TrimSpace(os.Getenv("log_level"))) {
+	level := strings.ToLower(strings.TrimSpace(os.Getenv("LOG_LEVEL")))
+	switch level {
 	case "info":
 		return zapcore.InfoLevel
 	case "fatal":
@@ -63,7 +65,7 @@ func getLevelLogs() zapcore.Level {
 	case "error":
 		return zapcore.ErrorLevel
 	case "debug":
-		return zapcore.ErrorLevel
+		return zapcore.DebugLevel
 	default:
 		return zapcore.InfoLevel
 	}
