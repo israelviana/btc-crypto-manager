@@ -84,31 +84,6 @@ info:
   title: BTC-CRYPTO-MANAGER
   version: "1.0"
 paths:
-  /address/{address}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves detailed information for a given Bitcoin address
-      parameters:
-      - description: Bitcoin Address
-        in: path
-        name: address
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Bitcoin Details
-          schema:
-            $ref: '#/definitions/domain.DetailsAddress'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/domain.HTTPErrorResponse'
-      summary: Find details per Bitcoin address
-      tags:
-      - Bitcoin
   /balance/{address}:
     get:
       consumes:
@@ -132,6 +107,31 @@ paths:
           schema:
             $ref: '#/definitions/domain.HTTPErrorResponse'
       summary: Find balance per Bitcoin address
+      tags:
+      - Bitcoin
+  /details/{address}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves detailed information for a given Bitcoin address
+      parameters:
+      - description: Bitcoin Address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bitcoin Details
+          schema:
+            $ref: '#/definitions/domain.DetailsAddress'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Find details per Bitcoin address
       tags:
       - Bitcoin
   /send:

@@ -15,44 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/address/{address}": {
-            "get": {
-                "description": "Retrieves detailed information for a given Bitcoin address",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Bitcoin"
-                ],
-                "summary": "Find details per Bitcoin address",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bitcoin Address",
-                        "name": "address",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Bitcoin Details",
-                        "schema": {
-                            "$ref": "#/definitions/domain.DetailsAddress"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/domain.HTTPErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/balance/{address}": {
             "get": {
                 "description": "Retrieves balance information for a given Bitcoin address",
@@ -80,6 +42,44 @@ const docTemplate = `{
                         "description": "Bitcoin Balance",
                         "schema": {
                             "$ref": "#/definitions/domain.BalanceDetail"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.HTTPErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/details/{address}": {
+            "get": {
+                "description": "Retrieves detailed information for a given Bitcoin address",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Bitcoin"
+                ],
+                "summary": "Find details per Bitcoin address",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bitcoin Address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Bitcoin Details",
+                        "schema": {
+                            "$ref": "#/definitions/domain.DetailsAddress"
                         }
                     },
                     "400": {

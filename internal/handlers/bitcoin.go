@@ -25,7 +25,7 @@ func NewBitcoinHandler(bitcoinService ports.BitcoinService) *Handler {
 // @Param   address path string true "Bitcoin Address"
 // @Success 200 {object} domain.DetailsAddress "Bitcoin Details"
 // @Failure 400 {object} domain.HTTPErrorResponse "Bad Request"
-// @Router /address/{address} [get]
+// @Router /details/{address} [get]
 func (srv *Handler) FindDetailsPerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
