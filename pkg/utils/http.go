@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"io"
 	"net/http"
+	"strings"
 )
 
 type Options interface {
@@ -56,7 +57,7 @@ func Get(ctx context.Context, url string, responseBody interface{}, options ...O
 
 	bodyRes, err := io.ReadAll(res.Body)
 
-	if err != nil {
+	if err != nil || strings.Contains(string(bodyRes), "error") {
 		logger.Error(constants.ErrorToReadResponseBody, err)
 		return err
 	}

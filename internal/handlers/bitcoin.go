@@ -30,7 +30,7 @@ func (srv *Handler) FindDetailsPerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
 	if !utils.ValidateBitcoinAddress(address) {
-		return utils.HTTPFail(ctx, http.StatusBadRequest, nil, "address bitcoin dont be could empty")
+		return utils.HTTPFail(ctx, http.StatusBadRequest, nil, "invalid address bitcoin")
 	}
 
 	perAddress, err := srv.bitcoinService.FindDetailsPerAddress(address)
@@ -55,7 +55,7 @@ func (srv *Handler) FindBalancePerAddress(ctx *fiber.Ctx) error {
 	address := ctx.Params("address")
 
 	if !utils.ValidateBitcoinAddress(address) {
-		return utils.HTTPFail(ctx, http.StatusBadRequest, nil, "address bitcoin dont be could empty")
+		return utils.HTTPFail(ctx, http.StatusBadRequest, nil, "invalid address bitcoin")
 	}
 
 	perAddress, err := srv.bitcoinService.FindBalancePerAddress(address)
@@ -106,7 +106,7 @@ func (srv *Handler) FindDetailsPerTransactionId(ctx *fiber.Ctx) error {
 	transactionID := ctx.Params("tx")
 
 	if !utils.ValidateTransactionID(transactionID) {
-		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "transactionID dont be could empty"})
+		return ctx.Status(http.StatusBadRequest).JSON(map[string]string{"error": "invalid transactionID"})
 	}
 
 	detailsPerTransaction, err := srv.bitcoinService.FindDetailsPerTransactionId(transactionID)
