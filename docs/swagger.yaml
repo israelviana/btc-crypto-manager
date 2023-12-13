@@ -1,0 +1,191 @@
+basePath: /
+definitions:
+  domain.Address:
+    properties:
+      address:
+        type: string
+      value:
+        type: string
+    type: object
+  domain.BalanceDetail:
+    properties:
+      confirmed:
+        type: string
+      unconfirmed:
+        type: string
+    type: object
+  domain.BitcoinRequest:
+    properties:
+      address:
+        type: string
+      amount:
+        type: string
+    type: object
+  domain.BitcoinReturnSend:
+    properties:
+      amount:
+        type: string
+      txid:
+        type: string
+    type: object
+  domain.DetailsAddress:
+    properties:
+      address:
+        type: string
+      balance:
+        type: string
+      balance_details:
+        $ref: '#/definitions/domain.BalanceDetail'
+      total:
+        $ref: '#/definitions/domain.Total'
+      totalTx:
+        type: integer
+    type: object
+  domain.HTTPErrorResponse:
+    properties:
+      error:
+        items:
+          type: integer
+        type: array
+      errorMessage:
+        type: string
+      message:
+        type: string
+    type: object
+  domain.Total:
+    properties:
+      received:
+        type: string
+      sent:
+        type: string
+    type: object
+  domain.Transaction:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/domain.Address'
+        type: array
+      block:
+        type: integer
+      txID:
+        type: string
+    type: object
+  domain.UTXOs:
+    properties:
+      utxos:
+        items:
+          $ref: '#/definitions/domain.BitcoinReturnSend'
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for bitcoin operations.
+  title: BTC-CRYPTO-MANAGER
+  version: "1.0"
+paths:
+  /address/{address}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves detailed information for a given Bitcoin address
+      parameters:
+      - description: Bitcoin Address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bitcoin Details
+          schema:
+            $ref: '#/definitions/domain.DetailsAddress'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Find details per Bitcoin address
+      tags:
+      - Bitcoin
+  /balance/{address}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves balance information for a given Bitcoin address
+      parameters:
+      - description: Bitcoin Address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bitcoin Balance
+          schema:
+            $ref: '#/definitions/domain.BalanceDetail'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Find balance per Bitcoin address
+      tags:
+      - Bitcoin
+  /send:
+    post:
+      consumes:
+      - application/json
+      description: Creates a UTXO set for a given Bitcoin address and amount
+      parameters:
+      - description: Bitcoin Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.BitcoinRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: UTXO
+          schema:
+            items:
+              $ref: '#/definitions/domain.UTXOs'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Mount UTXO
+      tags:
+      - Bitcoin
+  /tx/{tx}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves detailed information for a given Bitcoin transaction
+        ID
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: tx
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Transaction Details
+          schema:
+            $ref: '#/definitions/domain.Transaction'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Find details per transaction ID
+      tags:
+      - Bitcoin
+swagger: "2.0"
