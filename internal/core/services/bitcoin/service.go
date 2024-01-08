@@ -73,9 +73,16 @@ func (srv *Service) MountUTXO(address string, amountNeeded string) (*domain.UTXO
 		return nil, errors.New("error to get UTXO details in klever api")
 	}
 
-	amountValueNeeded, _ := strconv.Atoi(amountNeeded)
+	amountValueNeeded, err := strconv.Atoi(amountNeeded)
+	if err != nil {
+		return nil, errors.New("error to convert amount needed in INT")
+	}
+
 	for _, utxo := range *utxoDetails {
-		utxoValue, _ := strconv.Atoi(utxo.Value)
+		utxoValue, err := strconv.Atoi(utxo.Value)
+		if err != nil {
+			return nil, errors.New("error to convert utxo value in INT")
+		}
 
 		totalAmount += utxoValue
 		selectedUTXOs = append(selectedUTXOs, domain.BitcoinReturnSend{
