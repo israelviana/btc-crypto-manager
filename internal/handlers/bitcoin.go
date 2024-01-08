@@ -86,7 +86,7 @@ func (srv *Handler) MountUTXO(ctx *fiber.Ctx) error {
 	utxo, err := srv.bitcoinService.MountUTXO(request.Address, request.Amount)
 
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "error to read received body"})
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(&utxo)

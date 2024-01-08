@@ -3,6 +3,7 @@ package bitcoin
 import (
 	"bitcoin-challenge/internal/core/domain"
 	"bitcoin-challenge/internal/core/ports"
+	"bitcoin-challenge/pkg/utils"
 	"errors"
 	"strconv"
 )
@@ -67,6 +68,10 @@ func (srv *Service) MountUTXO(address string, amountNeeded string) (*domain.UTXO
 	var utxosItem domain.UTXOs
 
 	var totalAmount int
+
+	if !utils.ValidateBitcoinAddress(address) {
+		return nil, errors.New("invalid bitcoin address")
+	}
 
 	utxoDetails, err := srv.kleverService.RequestAddressUTXODetails(address)
 	if err != nil {
